@@ -20,7 +20,7 @@ class User(db.Model):
     city = db.Column(db.String(100), nullable=False)
     pin_code = db.Column(db.String(6), nullable=False)
 
-    # blood_group = db.Column(db.Enum(BloodGroupType), nullable=False)
+    blood_group = db.Column(db.Enum(BloodGroupType), nullable=True)
 
     @classmethod
     def find_by_username(cls, username: str) -> 'User':

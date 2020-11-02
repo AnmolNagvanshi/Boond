@@ -27,12 +27,6 @@ class BloodBank(db.Model):
         return f"{self.name} in {self.city}, {self.state}"
 
 
-
-
-
-
-
-
 # class BloodGroup(db.Model):
 #     __tablename__ = "blood_groups"
 #

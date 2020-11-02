@@ -27,8 +27,12 @@ def hello_world():
     return 'Hello World!'
 
 
+db.init_app(app)
+ma.init_app(app)
+
+from models import user, blood_bag, blood_bank, bag_size
+
+
 if __name__ == '__main__':
-    db.init_app(app)
-    ma.init_app(app)
     app.run()
 
