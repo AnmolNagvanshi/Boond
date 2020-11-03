@@ -11,7 +11,7 @@ class User(db.Model):
     username = db.Column(db.String(64), index=True, unique=True, nullable=False)
 
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(128), nullable=False)
     registered_on = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     mobile_no = db.Column(db.String(10), nullable=False)
@@ -25,6 +25,10 @@ class User(db.Model):
     @classmethod
     def find_by_username(cls, username: str) -> 'User':
         return cls.query.filter_by(username=username).first()
+
+    @classmethod
+    def find_by_email(cls, email: str) -> 'User':
+        return cls.query.filter_by(email=email).first()
 
     @classmethod
     def find_by_id(cls, user_id: int) -> 'User':

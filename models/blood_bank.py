@@ -1,5 +1,6 @@
 from datetime import datetime
 from app import db
+from .blood_bag import BloodBag
 
 
 class BloodBank(db.Model):
@@ -9,7 +10,7 @@ class BloodBank(db.Model):
     name = db.Column(db.String(64), index=True, unique=True, nullable=False)
 
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(128), nullable=False)
     registered_on = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     mobile_no = db.Column(db.String(10), nullable=False)
@@ -21,7 +22,11 @@ class BloodBank(db.Model):
     latitude = db.Column(db.String(20), nullable=True)
     longitude = db.Column(db.String(20), nullable=True)
 
-    # bags = db.relationship('BloodBag', backref='blood_bank', lazy='dynamic')
+    bags = db.relationship('BloodBag', backref='blood_bank', lazy='dynamic')
+
+    @classmethod
+    def find_by_email(cls, email: str):
+        return cls.query.filter_by(email=email).first()
 
     def __repr__(self):
         return f"{self.name} in {self.city}, {self.state}"
