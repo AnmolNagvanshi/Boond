@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class BloodGroupType(str, Enum):
+class BloodGroupType(IntEnum):
     A_POS = 0
     A_NEG = 1
     B_POS = 2

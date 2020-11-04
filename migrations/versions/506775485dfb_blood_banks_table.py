@@ -1,8 +1,8 @@
 """blood_banks table
 
-Revision ID: 69722baaa4c6
-Revises: 5291db81d094
-Create Date: 2020-11-02 15:07:28.136379
+Revision ID: 506775485dfb
+Revises: b85d96bed599
+Create Date: 2020-11-04 08:41:14.721159
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '69722baaa4c6'
-down_revision = '5291db81d094'
+revision = '506775485dfb'
+down_revision = 'b85d96bed599'
 branch_labels = None
 depends_on = None
 
@@ -22,7 +22,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(length=64), nullable=False),
     sa.Column('email', sa.String(length=120), nullable=False),
-    sa.Column('password_hash', sa.String(length=128), nullable=False),
+    sa.Column('password', sa.String(length=128), nullable=False),
     sa.Column('registered_on', sa.DateTime(), nullable=False),
     sa.Column('mobile_no', sa.String(length=10), nullable=False),
     sa.Column('address', sa.String(length=400), nullable=False),

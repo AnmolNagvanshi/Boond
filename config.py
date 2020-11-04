@@ -12,7 +12,7 @@ class Config(object):
     PROPAGATE_EXCEPTIONS = True
 
     JWT_BLACKLIST_ENABLED = True  # enable blacklist feature
-    JWT_BLACKLIST_TOKEN_CHECKS = ["access", ]  # allow blacklisting for access and refresh tokens
+    JWT_BLACKLIST_TOKEN_CHECKS = ["access", ]  # allow blacklisting for access tokens
     JWT_SECRET_KEY = 'top-secret-key'
     JWT_ACCESS_TOKEN_EXPIRES = datetime.timedelta(days=1)
     JWT_ERROR_MESSAGE_KEY = "message"

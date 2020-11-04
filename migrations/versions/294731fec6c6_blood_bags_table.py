@@ -1,17 +1,18 @@
 """blood_bags table
 
-Revision ID: 6e0ab27e3dc8
-Revises: 69722baaa4c6
-Create Date: 2020-11-02 15:08:11.757244
+Revision ID: 294731fec6c6
+Revises: fb7bd3ea9a02
+Create Date: 2020-11-04 08:43:07.050300
 
 """
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import ENUM
 
+
 # revision identifiers, used by Alembic.
-revision = '6e0ab27e3dc8'
-down_revision = '69722baaa4c6'
+revision = '294731fec6c6'
+down_revision = 'fb7bd3ea9a02'
 branch_labels = None
 depends_on = None
 

@@ -1,8 +1,8 @@
 """bag_sizes table
 
-Revision ID: 5291db81d094
-Revises: 8b9f7d0a598f
-Create Date: 2020-11-02 15:06:12.552225
+Revision ID: fb7bd3ea9a02
+Revises: 506775485dfb
+Create Date: 2020-11-04 08:42:01.980729
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5291db81d094'
-down_revision = '8b9f7d0a598f'
+revision = 'fb7bd3ea9a02'
+down_revision = '506775485dfb'
 branch_labels = None
 depends_on = None
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 from app import db
-from .blood_bag import BloodBag
+# from .blood_bag import BloodBag
 
 
 class BloodBank(db.Model):
