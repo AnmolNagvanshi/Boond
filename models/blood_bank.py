@@ -23,7 +23,7 @@ class BloodBank(db.Model):
     latitude = db.Column(db.String(20), nullable=True)
     longitude = db.Column(db.String(20), nullable=True)
 
-    bags = db.relationship('BloodBag', backref='blood_bank', lazy='dynamic')
+    bags = db.relationship('BloodBag', backref='bank', lazy='dynamic')
 
     @classmethod
     def find_by_name(cls, name: str) -> 'BloodBank':

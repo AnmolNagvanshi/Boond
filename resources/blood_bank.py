@@ -5,6 +5,9 @@ from flask_jwt_extended import jwt_required
 from models.blood_bank import BloodBank
 from schemas.blood_bank import BloodBankSchema
 
+from utilities import geo
+from utilities.blood_group import BloodGroupType
+
 # Response Messages
 BANK_ALREADY_EXISTS = "A blood bank with that name already exists."
 CREATED_SUCCESSFULLY = "blood bank account created successfully."
@@ -55,4 +58,26 @@ class BloodBankAPI(Resource):
 
         bank.delete_from_db()
         return {"message": BANK_DELETED}, 200
+
+# /banks?
+class BanksByDistanceAPI(Resource):
+
+    @classmethod
+    def get(cls, latitude: float, longitude: float, radius: float):
+        banks = BloodBank.find_all()
+
+        # filter and sort banks by distance
+        sorted_banks = geo.sort_by_distance(banks, latitude, longitude, radius)
+
+        return {"banks": bank_list_schema.dump(sorted_banks)}, 200
+
+
+class BanksByQuantityOfBloodAPI(Resource):
+
+    @classmethod
+    def get(cls, group: int):
+        blood_group = BloodGroupType(group)
+        banks = BloodBank.query.filter_by().all()
+
+
 

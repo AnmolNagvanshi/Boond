@@ -39,7 +39,6 @@ api.add_resource(LogoutAPI, "/logout")
 api.add_resource(UserListAPI, "/users")
 api.add_resource(UserAPI, "/users/<int:user_id>")
 
-
 @app.route('/')
 def hello_world():
     return 'Hello World!'
