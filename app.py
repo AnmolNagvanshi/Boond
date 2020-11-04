@@ -24,7 +24,7 @@ migrate = Migrate(app, db)
 
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(err):
-    return jsonify(err.messages), 400
+    return err.messages, 400
 
 
 # This method will check if a token is blacklisted, and will be called automatically when blacklist is enabled

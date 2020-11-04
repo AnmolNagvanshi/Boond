@@ -1,6 +1,7 @@
 from datetime import datetime
+from typing import List
 from app import db
-# from .blood_bag import BloodBag
+from .blood_bag import BloodBag
 
 
 class BloodBank(db.Model):
@@ -25,8 +26,28 @@ class BloodBank(db.Model):
     bags = db.relationship('BloodBag', backref='blood_bank', lazy='dynamic')
 
     @classmethod
+    def find_by_name(cls, name: str) -> 'BloodBank':
+        return cls.query.filter_by(name=name).first()
+
+    @classmethod
     def find_by_email(cls, email: str):
         return cls.query.filter_by(email=email).first()
+
+    @classmethod
+    def find_by_id(cls, bank_id: int) -> 'BloodBank':
+        return cls.query.filter_by(id=bank_id).first()
+
+    @classmethod
+    def find_all(cls) -> List['BloodBank']:
+        return cls.query.all()
+
+    def save_to_db(self) -> None:
+        db.session.add(self)
+        db.session.commit()
+
+    def delete_from_db(self) -> None:
+        db.session.delete(self)
+        db.session.commit()
 
     def __repr__(self):
         return f"{self.name} in {self.city}, {self.state}"

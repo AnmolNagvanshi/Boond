@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required
 from models.user import User
 from schemas.user import UserSchema
 
-# Error Messages
+# Response Messages
 USER_ALREADY_EXISTS = "A user with that username already exists."
 CREATED_SUCCESSFULLY = "User created successfully."
 USER_NOT_FOUND = "User not found."
@@ -21,20 +21,21 @@ class UserListAPI(Resource):
     @jwt_required
     def get(cls):
         user_list = user_list_schema.dump(User.find_all())
-        return {"items": user_list}, 200
+        return {"users": user_list}, 200
 
     @classmethod
     def post(cls):
         user_json = request.get_json()
         user = user_schema.load(user_json)
 
-        if User.find_by_username(user.username):
+        if User.find_by_username(user.username) or User.find_by_email(user.email):
             return {"message": USER_ALREADY_EXISTS}, 400
 
         user.save_to_db()
         return {"message": CREATED_SUCCESSFULLY}, 201
 
 
+# noinspection DuplicatedCode
 class UserAPI(Resource):
 
     @classmethod

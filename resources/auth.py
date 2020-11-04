@@ -9,7 +9,7 @@ from flask_jwt_extended import (
 )
 
 from models.user import User
-# from models.blood_bank import BloodBank
+from models.blood_bank import BloodBank
 from schemas.auth import LoginSchema
 from blacklist import BLACKLIST
 
@@ -27,10 +27,10 @@ class LoginAPI(Resource):
         user_json = request.get_json()
         login_data = login_schema.load(user_json)
 
-        # if login_data['is_user']:
-        user = User.find_by_email(login_data['email'])
-        # else:
-        #     user = BloodBank.find_by_email(login_data['email'])
+        if login_data['is_user']:
+            user = User.find_by_email(login_data['email'])
+        else:
+            user = BloodBank.find_by_email(login_data['email'])
 
         if user and safe_str_cmp(login_data['password'], user.password):
             access_token = create_access_token(identity=user.id, fresh=True)
