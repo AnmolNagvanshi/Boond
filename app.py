@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from flask import Flask, jsonify
 from config import Config
+from flask_bcrypt import Bcrypt
 
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
@@ -16,8 +19,8 @@ from resources.user import UserListAPI, UserAPI
 from resources.blood_bank import (
     BankListAPI,
     BankAPI,
-    BanksByDistanceAPI,
-    BanksByStateAndCity
+    # BanksByDistanceAPI,
+    # BanksByStateAndCity
 )
 from resources.blood_bag import (
     AllBloodBagsAPI,
@@ -31,9 +34,9 @@ app.config.from_object(Config)
 # Flask extensions
 api = Api(app)
 jwt = JWTManager(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db, compare_type=True)
 toolbar = DebugToolbarExtension(app)
-
+bcrypt = Bcrypt()
 
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(err):
@@ -52,10 +55,10 @@ api.add_resource(LogoutAPI, "/logout")
 api.add_resource(UserListAPI, "/users")
 api.add_resource(UserAPI, "/users/<int:user_id>")
 
+# api.add_resource(BanksByDistanceAPI, "/banks?lati=<float:lati>&longi=<float:longi>&radius=<float:radius>")
+# api.add_resource(BanksByStateAndCity, "/banks?state=<string:state>&city=<string:city>")
 api.add_resource(BankListAPI, "/banks")
 api.add_resource(BankAPI, "/banks/<int:bank_id>")
-api.add_resource(BanksByDistanceAPI, "/banks?lati=<float:lati>&longi=<float:longi>&radius=<float:radius>")
-api.add_resource(BanksByStateAndCity, "/banks?state=<string:state>&city=<string:city>")
 
 api.add_resource(AllBloodBagsAPI, "/bags")
 api.add_resource(BloodBagsByBankAPI, "/banks/<int:bank_id>/bags")
@@ -70,7 +73,8 @@ def hello_world():
 db.init_app(app)
 ma.init_app(app)
 
-from models import user, blood_bag, blood_bank, bag_size
+from models import user, blood_bank, bag_size, blood_bag
+# from models.blood_bank import BloodBank
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -23,7 +23,23 @@ class BankListAPI(Resource):
     @classmethod
     # @jwt_required
     def get(cls):
-        bank_list = bank_list_schema.dump(BloodBank.find_all())
+        req = request.args
+
+        # Banks by state and city
+        if 'state' in req and 'city' in req:
+            banks = BloodBank.find_all_by_state_city(req['state'], req['city'])
+
+        # Banks by distance
+        elif 'lati' in req and 'longi' in req and 'radius' in req:
+            all_banks = BloodBank.find_all()
+            # filter and sort banks by distance
+            banks = geo.sort_by_distance(all_banks, float(req['lati']), float(req['longi']), float(req['radius']))
+
+        else:
+            banks = BloodBank.find_all()
+
+        bank_list = bank_list_schema.dump(banks)
+
         return {"banks": bank_list}, 200
 
     @classmethod
@@ -60,25 +76,25 @@ class BankAPI(Resource):
         return {"message": BANK_DELETED}, 200
 
 
-class BanksByDistanceAPI(Resource):
-
-    @classmethod
-    def get(cls, lati: float, longi: float, radius: float):
-        banks = BloodBank.find_all()
-
-        # filter and sort banks by distance
-        sorted_banks = geo.sort_by_distance(banks, lati, longi, radius)
-
-        return {"banks": bank_list_schema.dump(sorted_banks)}, 200
-
-
-class BanksByStateAndCity(Resource):
-
-    @classmethod
-    def get(cls, state: str, city: str):
-        banks = BloodBank.find_all_by_state_city(state, city)
-
-        return {"banks": bank_list_schema.dump(banks)}, 200
+# class BanksByDistanceAPI(Resource):
+#
+#     @classmethod
+#     def get(cls, lati: float, longi: float, radius: float):
+#         banks = BloodBank.find_all()
+#
+#         # filter and sort banks by distance
+#         sorted_banks = geo.sort_by_distance(banks, lati, longi, radius)
+#
+#         return {"banks": bank_list_schema.dump(sorted_banks)}, 200
+#
+#
+# class BanksByStateAndCity(Resource):
+#
+#     @classmethod
+#     def get(cls, state: str, city: str):
+#         banks = BloodBank.find_all_by_state_city(state, city)
+#
+#         return {"banks": bank_list_schema.dump(banks)}, 200
 
 
 # class BanksByQuantityOfBloodAPI(Resource):

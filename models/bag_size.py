@@ -13,8 +13,8 @@ class BagSize(db.Model):
         return f"{self.volume} ml"
 
     @classmethod
-    def find_by_id(cls, size_id: int):
-        cls.query.filter_by(id=size_id).first()
+    def find_by_id(cls, size_id: int) -> 'BagSize':
+        return cls.query.filter_by(id=size_id).first()
 
     def save_to_db(self) -> None:
         db.session.add(self)

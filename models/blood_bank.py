@@ -20,8 +20,8 @@ class BloodBank(db.Model):
     city = db.Column(db.String(100), nullable=False)
     pin_code = db.Column(db.String(6), nullable=False)
 
-    latitude = db.Column(db.String(20), nullable=True)
-    longitude = db.Column(db.String(20), nullable=True)
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)
 
     bags = db.relationship('BloodBag', backref='bank', lazy='dynamic')
 
