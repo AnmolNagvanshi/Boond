@@ -19,29 +19,12 @@ bag_schema = BloodBagSchema()
 bag_list_schema = BloodBagSchema(many=True)
 
 
-class BloodBagListAPI(Resource):
+class AllBloodBagsAPI(Resource):
 
     @classmethod
     def get(cls):
         bag_list = bag_list_schema.dump(BloodBag.find_all())
         return {"bags": bag_list}, 200
-
-    @classmethod
-    def post(cls, bank_id: int):
-        if not BloodBank.find_by_id(bank_id):
-            return {"message": BANK_DOES_NOT_EXIST.format(bank_id)}, 400
-
-        bag_json = request.get_json()
-
-        if not BloodGroupType.has_key_member(bag_json['blood_group']):
-            return {"message": INVALID_BLOOD_GROUP}, 400
-
-        if not BagSize.find_by_id(bag_json['bag_size_id']):
-            return {"message": INVALID_BAG_SIZE}, 400
-
-        bag = bag_schema.load(bag_json)
-        bag.save_to_db()
-        return {"message": UPDATED_SUCCESSFULLY}, 200
 
 
 class BloodBagsByBankAPI(Resource):
@@ -53,6 +36,25 @@ class BloodBagsByBankAPI(Resource):
 
         bags = BloodBag.find_all_by_bank(bank_id)
         return {"bags": bag_list_schema.dump(bags)}, 200
+
+    @classmethod
+    def post(cls, bank_id: int):
+        if not BloodBank.find_by_id(bank_id):
+            return {"message": BANK_DOES_NOT_EXIST.format(bank_id)}, 400
+
+        bag_json = request.get_json()
+
+        blood_group = bag_json['blood_group']
+        if not BloodGroupType.has_key_member(blood_group):
+            return {"message": INVALID_BLOOD_GROUP}, 400
+
+        bag_size_id = bag_json['bag_size_id']
+        if not BagSize.find_by_id(bag_size_id):
+            return {"message": INVALID_BAG_SIZE}, 400
+
+        bag = bag_schema.load(bag_json)
+        bag.save_to_db()
+        return {"message": UPDATED_SUCCESSFULLY}, 200
 
 
 class BloodBagsByBankAndGroupAPI(Resource):

@@ -4,6 +4,7 @@ from config import Config
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
+from flask_debugtoolbar import DebugToolbarExtension
 from marshmallow import ValidationError
 
 from db import db
@@ -12,6 +13,17 @@ from blacklist import BLACKLIST
 
 from resources.auth import LoginAPI, LogoutAPI
 from resources.user import UserListAPI, UserAPI
+from resources.blood_bank import (
+    BankListAPI,
+    BankAPI,
+    BanksByDistanceAPI,
+    BanksByQuantityOfBloodAPI
+)
+from resources.blood_bag import (
+    AllBloodBagsAPI,
+    BloodBagsByBankAPI,
+    BloodBagsByBankAndGroupAPI
+)
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -20,6 +32,7 @@ app.config.from_object(Config)
 api = Api(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db)
+toolbar = DebugToolbarExtension(app)
 
 
 @app.errorhandler(ValidationError)
@@ -39,9 +52,19 @@ api.add_resource(LogoutAPI, "/logout")
 api.add_resource(UserListAPI, "/users")
 api.add_resource(UserAPI, "/users/<int:user_id>")
 
+api.add_resource(BankListAPI, "/banks")
+api.add_resource(BankAPI, "/banks/<int:bank_id>")
+api.add_resource(BanksByDistanceAPI, "/banks?lati=<float:lati>&longi=<float:longi>&radius=<float:radius>")
+api.add_resource(BanksByQuantityOfBloodAPI, "/banks/<int:group>")
+
+api.add_resource(AllBloodBagsAPI, "/bags")
+api.add_resource(BloodBagsByBankAPI, "banks/<int:bank_id>/bags")
+api.add_resource(BloodBagsByBankAndGroupAPI, "/banks/<int:bank_id>/groups/<int:group>/bags")
+
+
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return '<body><h1>Hello World!</h1></body>'
 
 
 db.init_app(app)
@@ -50,4 +73,4 @@ ma.init_app(app)
 from models import user, blood_bag, blood_bank, bag_size
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

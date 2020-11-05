@@ -18,7 +18,7 @@ bank_schema = BloodBankSchema()
 bank_list_schema = BloodBankSchema(many=True)
 
 
-class BloodBankListAPI(Resource):
+class BankListAPI(Resource):
 
     @classmethod
     @jwt_required
@@ -38,7 +38,7 @@ class BloodBankListAPI(Resource):
         return {"message": CREATED_SUCCESSFULLY}, 201
 
 
-class BloodBankAPI(Resource):
+class BankAPI(Resource):
 
     @classmethod
     # @jwt_required
@@ -59,15 +59,15 @@ class BloodBankAPI(Resource):
         bank.delete_from_db()
         return {"message": BANK_DELETED}, 200
 
-# /banks?
+
 class BanksByDistanceAPI(Resource):
 
     @classmethod
-    def get(cls, latitude: float, longitude: float, radius: float):
+    def get(cls, lati: float, longi: float, radius: float):
         banks = BloodBank.find_all()
 
         # filter and sort banks by distance
-        sorted_banks = geo.sort_by_distance(banks, latitude, longitude, radius)
+        sorted_banks = geo.sort_by_distance(banks, lati, longi, radius)
 
         return {"banks": bank_list_schema.dump(sorted_banks)}, 200
 
@@ -78,6 +78,3 @@ class BanksByQuantityOfBloodAPI(Resource):
     def get(cls, group: int):
         blood_group = BloodGroupType(group)
         banks = BloodBank.query.filter_by().all()
-
-
-
