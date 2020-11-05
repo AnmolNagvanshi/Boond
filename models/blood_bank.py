@@ -8,7 +8,7 @@ class BloodBank(db.Model):
     __tablename__ = "blood_banks"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(64), index=True, unique=True, nullable=False)
+    name = db.Column(db.String(64), nullable=False)
 
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
@@ -41,6 +41,10 @@ class BloodBank(db.Model):
     def find_all(cls) -> List['BloodBank']:
         return cls.query.all()
 
+    @classmethod
+    def find_all_by_state_city(cls, state: str, city: str):
+        return cls.query.filter_by(state=state, city=city).all()
+
     def save_to_db(self) -> None:
         db.session.add(self)
         db.session.commit()
@@ -51,6 +55,7 @@ class BloodBank(db.Model):
 
     def __repr__(self):
         return f"{self.name} in {self.city}, {self.state}"
+
 
 
 # class BloodGroup(db.Model):

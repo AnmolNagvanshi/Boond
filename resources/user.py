@@ -6,7 +6,7 @@ from models.user import User
 from schemas.user import UserSchema
 
 # Response Messages
-USER_ALREADY_EXISTS = "A user with that username already exists."
+USER_ALREADY_EXISTS = "A user with that email already exists."
 CREATED_SUCCESSFULLY = "User created successfully."
 USER_NOT_FOUND = "User not found."
 USER_DELETED = "User deleted."
@@ -28,7 +28,7 @@ class UserListAPI(Resource):
         user_json = request.get_json()
         user = user_schema.load(user_json)
 
-        if User.find_by_username(user.username) or User.find_by_email(user.email):
+        if User.find_by_email(user.email):
             return {"message": USER_ALREADY_EXISTS}, 400
 
         user.save_to_db()

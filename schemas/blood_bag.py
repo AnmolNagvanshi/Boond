@@ -7,7 +7,7 @@ class BloodBagSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = BloodBag
         # load_only = ()
-        dump_only = ("id",)
+        dump_only = ("id", "bank_id")
 
     @post_load
     def make_blood_bag(self, data, **kwargs):

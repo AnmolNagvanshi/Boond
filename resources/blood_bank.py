@@ -6,13 +6,13 @@ from models.blood_bank import BloodBank
 from schemas.blood_bank import BloodBankSchema
 
 from utilities import geo
-from utilities.blood_group import BloodGroupType
+# from utilities.blood_group import BloodGroupType
 
 # Response Messages
-BANK_ALREADY_EXISTS = "A blood bank with that name already exists."
-CREATED_SUCCESSFULLY = "blood bank account created successfully."
-BANK_NOT_FOUND = "blood bank not found."
-BANK_DELETED = "blood bank account deleted."
+BANK_ALREADY_EXISTS = "A blood bank with that email already exists."
+CREATED_SUCCESSFULLY = "Blood bank account created successfully."
+BANK_NOT_FOUND = "Blood bank not found."
+BANK_DELETED = "Blood bank account deleted."
 
 bank_schema = BloodBankSchema()
 bank_list_schema = BloodBankSchema(many=True)
@@ -21,7 +21,7 @@ bank_list_schema = BloodBankSchema(many=True)
 class BankListAPI(Resource):
 
     @classmethod
-    @jwt_required
+    # @jwt_required
     def get(cls):
         bank_list = bank_list_schema.dump(BloodBank.find_all())
         return {"banks": bank_list}, 200
@@ -31,7 +31,7 @@ class BankListAPI(Resource):
         bank_json = request.get_json()
         bank = bank_schema.load(bank_json)
 
-        if BloodBank.find_by_name(bank.name) or BloodBank.find_by_email(bank.email):
+        if BloodBank.find_by_email(bank.email):
             return {"message": BANK_ALREADY_EXISTS}, 400
 
         bank.save_to_db()
@@ -72,9 +72,19 @@ class BanksByDistanceAPI(Resource):
         return {"banks": bank_list_schema.dump(sorted_banks)}, 200
 
 
-class BanksByQuantityOfBloodAPI(Resource):
+class BanksByStateAndCity(Resource):
 
     @classmethod
-    def get(cls, group: int):
-        blood_group = BloodGroupType(group)
-        banks = BloodBank.query.filter_by().all()
+    def get(cls, state: str, city: str):
+        banks = BloodBank.find_all_by_state_city(state, city)
+
+        return {"banks": bank_list_schema.dump(banks)}, 200
+
+
+# class BanksByQuantityOfBloodAPI(Resource):
+#
+#     @classmethod
+#     def get(cls, group: int):
+#         blood_group = BloodGroupType(group)
+#         bags = BloodBag.find_all_by_bank_and_group()
+#

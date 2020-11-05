@@ -17,7 +17,7 @@ from resources.blood_bank import (
     BankListAPI,
     BankAPI,
     BanksByDistanceAPI,
-    BanksByQuantityOfBloodAPI
+    BanksByStateAndCity
 )
 from resources.blood_bag import (
     AllBloodBagsAPI,
@@ -55,10 +55,10 @@ api.add_resource(UserAPI, "/users/<int:user_id>")
 api.add_resource(BankListAPI, "/banks")
 api.add_resource(BankAPI, "/banks/<int:bank_id>")
 api.add_resource(BanksByDistanceAPI, "/banks?lati=<float:lati>&longi=<float:longi>&radius=<float:radius>")
-api.add_resource(BanksByQuantityOfBloodAPI, "/banks/<int:group>")
+api.add_resource(BanksByStateAndCity, "/banks?state=<string:state>&city=<string:city>")
 
 api.add_resource(AllBloodBagsAPI, "/bags")
-api.add_resource(BloodBagsByBankAPI, "banks/<int:bank_id>/bags")
+api.add_resource(BloodBagsByBankAPI, "/banks/<int:bank_id>/bags")
 api.add_resource(BloodBagsByBankAndGroupAPI, "/banks/<int:bank_id>/groups/<int:group>/bags")
 
 
