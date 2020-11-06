@@ -9,6 +9,7 @@ class BloodBagSchema(ma.SQLAlchemyAutoSchema):
         # load_only = ()
         dump_only = ("id", "blood_bank_id")
         include_fk = True
+
     bag_size_id = fields.Int(required=True)
     # bank_id = fields.Int(dump_only=True)
 

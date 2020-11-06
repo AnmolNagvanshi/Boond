@@ -27,6 +27,7 @@ from resources.blood_bag import (
     BloodBagsByBankAPI,
     BloodBagsByBankAndGroupAPI
 )
+from resources.donation import DonationsByUserAPI
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -63,6 +64,8 @@ api.add_resource(AllBloodBagsAPI, "/bags")
 api.add_resource(BloodBagsByBankAPI, "/banks/<int:bank_id>/bags")
 api.add_resource(BloodBagsByBankAndGroupAPI, "/banks/<int:bank_id>/groups/<int:group>/bags")
 
+api.add_resource(DonationsByUserAPI, "/users/<int:user_id>/donations")
+
 
 @app.route('/')
 def hello_world():
@@ -73,7 +76,7 @@ db.init_app(app)
 ma.init_app(app)
 bcrypt.init_app(app)
 
-from models import user, blood_bank, bag_size, blood_bag
+from models import user, blood_bank, bag_size, blood_bag, donation
 # from models.blood_bank import BloodBank
 
 if __name__ == '__main__':

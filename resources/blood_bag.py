@@ -61,6 +61,7 @@ class BloodBagsByBankAPI(Resource):
         bag = bag_schema.load(bag_json)
         bag.blood_bank_id = bank_id
         bag.bag_size_id = bag_size_id
+
         bag.save_to_db()
         return {"message": UPDATED_SUCCESSFULLY}, 200
 

@@ -2,6 +2,7 @@ from typing import List
 from datetime import datetime
 from app import db
 from utilities.blood_group import BloodGroupType
+from .donation import Donation
 
 
 class User(db.Model):
@@ -21,6 +22,8 @@ class User(db.Model):
     pin_code = db.Column(db.String(6), nullable=False)
 
     blood_group = db.Column(db.Enum(BloodGroupType), nullable=True)
+
+    donations = db.relationship('Donation', backref='user', lazy='dynamic')
 
     @classmethod
     def find_by_username(cls, username: str) -> 'User':
