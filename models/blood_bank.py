@@ -30,6 +30,11 @@ class BloodBank(db.Model):
         return cls.query.filter_by(name=name).first()
 
     @classmethod
+    def find_all_like_name(cls, name: str) -> 'BloodBank':
+        search = f"%{name}%"
+        return cls.query.filter(cls.name.like(search)).all()
+
+    @classmethod
     def find_by_email(cls, email: str):
         return cls.query.filter_by(email=email).first()
 

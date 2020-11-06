@@ -36,6 +36,10 @@ class BankListAPI(Resource):
             # filter and sort banks by distance
             banks = geo.sort_by_distance(all_banks, float(req['lati']), float(req['longi']), float(req['radius']))
 
+        # search all banks with similar names
+        elif 'name' in req:
+            banks = BloodBank.find_all_like_name(req['name'])
+
         else:
             banks = BloodBank.find_all()
 
