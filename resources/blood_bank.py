@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from flask_jwt_extended import jwt_required
+from pass_hash import bcrypt
 
 from models.blood_bank import BloodBank
 from schemas.blood_bank import BloodBankSchema
@@ -42,6 +43,7 @@ class BankListAPI(Resource):
 
         return {"banks": bank_list}, 200
 
+    # noinspection DuplicatedCode
     @classmethod
     def post(cls):
         bank_json = request.get_json()
@@ -50,7 +52,10 @@ class BankListAPI(Resource):
         if BloodBank.find_by_email(bank.email):
             return {"message": BANK_ALREADY_EXISTS}, 400
 
+        pw_hash = bcrypt.generate_password_hash(bank.password)
+        bank.password = pw_hash.decode()  # convert bytes to string
         bank.save_to_db()
+
         return {"message": CREATED_SUCCESSFULLY}, 201
 
 
@@ -104,3 +109,4 @@ class BankAPI(Resource):
 #         blood_group = BloodGroupType(group)
 #         bags = BloodBag.find_all_by_bank_and_group()
 #
+

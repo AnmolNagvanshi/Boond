@@ -1,17 +1,17 @@
 from datetime import datetime
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from config import Config
-from flask_bcrypt import Bcrypt
 
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
-from flask_debugtoolbar import DebugToolbarExtension
 from marshmallow import ValidationError
 
 from db import db
 from ma import ma
+from pass_hash import bcrypt
 from blacklist import BLACKLIST
 
 from resources.auth import LoginAPI, LogoutAPI
@@ -33,10 +33,9 @@ app.config.from_object(Config)
 
 # Flask extensions
 api = Api(app)
+CORS(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db, compare_type=True)
-toolbar = DebugToolbarExtension(app)
-bcrypt = Bcrypt()
 
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(err):
@@ -72,6 +71,7 @@ def hello_world():
 
 db.init_app(app)
 ma.init_app(app)
+bcrypt.init_app(app)
 
 from models import user, blood_bank, bag_size, blood_bag
 # from models.blood_bank import BloodBank

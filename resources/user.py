@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from flask_jwt_extended import jwt_required
+from pass_hash import bcrypt
 
 from models.user import User
 from schemas.user import UserSchema
@@ -23,6 +24,7 @@ class UserListAPI(Resource):
         user_list = user_list_schema.dump(User.find_all())
         return {"users": user_list}, 200
 
+    # noinspection DuplicatedCode
     @classmethod
     def post(cls):
         user_json = request.get_json()
@@ -31,7 +33,10 @@ class UserListAPI(Resource):
         if User.find_by_email(user.email):
             return {"message": USER_ALREADY_EXISTS}, 400
 
+        pw_hash = bcrypt.generate_password_hash(user.password)
+        user.password = pw_hash.decode()  # convert bytes to string
         user.save_to_db()
+
         return {"message": CREATED_SUCCESSFULLY}, 201
 
 

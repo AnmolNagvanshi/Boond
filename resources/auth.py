@@ -7,6 +7,7 @@ from flask_jwt_extended import (
     jwt_required,
     get_raw_jwt,
 )
+from pass_hash import bcrypt
 
 from models.user import User
 from models.blood_bank import BloodBank
@@ -32,7 +33,7 @@ class LoginAPI(Resource):
         else:
             user = BloodBank.find_by_email(login_data['email'])
 
-        if user and safe_str_cmp(login_data['password'], user.password):
+        if user and bcrypt.check_password_hash(user.password, login_data['password']):
             access_token = create_access_token(identity=user.id, fresh=True)
             return {"access_token": access_token}, 200
 
