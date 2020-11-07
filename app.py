@@ -28,6 +28,7 @@ from resources.blood_bag import (
     BloodBagsByBankAndGroupAPI
 )
 from resources.donation import DonationsByUserAPI
+from resources.city import CitiesByStateAPI
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -66,6 +67,8 @@ api.add_resource(BloodBagsByBankAndGroupAPI, "/banks/<int:bank_id>/groups/<int:g
 
 api.add_resource(DonationsByUserAPI, "/users/<int:user_id>/donations")
 
+# api.add_resource(CitiesByStateAPI, "/cities")
+
 
 @app.route('/')
 def hello_world():
@@ -76,7 +79,7 @@ db.init_app(app)
 ma.init_app(app)
 bcrypt.init_app(app)
 
-from models import user, blood_bank, bag_size, blood_bag, donation
+from models import user, blood_bank, bag_size, blood_bag, donation, state, city
 # from models.blood_bank import BloodBank
 
 if __name__ == '__main__':
