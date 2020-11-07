@@ -79,7 +79,7 @@ db.init_app(app)
 ma.init_app(app)
 bcrypt.init_app(app)
 
-from models import user, blood_bank, bag_size, blood_bag, donation, state, city
+from models import user, blood_bank, bag_size, blood_bag, donation, state, city, notification
 # from models.blood_bank import BloodBank
 
 if __name__ == '__main__':
