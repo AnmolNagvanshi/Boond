@@ -30,3 +30,4 @@ class Donation(db.Model):
     def delete_from_db(self) -> None:
         db.session.delete(self)
         db.session.commit()
+

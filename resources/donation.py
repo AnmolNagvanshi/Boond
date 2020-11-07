@@ -1,6 +1,9 @@
+from datetime import datetime
+
 from flask_restful import Resource
 from flask import request
 from flask_jwt_extended import jwt_required
+from db import db
 
 from models.user import User
 from models.blood_bank import BloodBank
@@ -47,6 +50,15 @@ class DonationsByUserAPI(Resource):
             return {"message": BANK_NOT_FOUND}, 404
 
         donation = donation_schema.load(donation_json)
-        donation.user_id = user_id
-        donation.save_to_db()
+        user.donations.append(donation)
+
+        # save user's last_donation_date
+        user.last_donation_date = donation.date_of_donation if donation.date_of_donation else datetime.now()
+
+        db.session.add(user)
+        db.session.add(donation)
+
+        db.session.commit()
+
         return {"message": DONATION_SAVED}, 201
+

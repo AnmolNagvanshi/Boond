@@ -1,6 +1,7 @@
 from ma import ma
 from models.blood_bag import BloodBag
 from marshmallow import post_load, fields
+from marshmallow.utils import EXCLUDE
 
 
 class BloodBagSchema(ma.SQLAlchemyAutoSchema):
@@ -9,6 +10,7 @@ class BloodBagSchema(ma.SQLAlchemyAutoSchema):
         # load_only = ()
         dump_only = ("id", "blood_bank_id")
         include_fk = True
+        unknown = EXCLUDE
 
     bag_size_id = fields.Int(required=True)
     # bank_id = fields.Int(dump_only=True)
