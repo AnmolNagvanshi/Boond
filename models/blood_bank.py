@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List
 from app import db
 from .blood_bag import BloodBag
+from utilities.blood_group import BloodGroupType
 
 
 class BloodBank(db.Model):
@@ -61,7 +62,18 @@ class BloodBank(db.Model):
     def __repr__(self):
         return f"{self.name} in {self.city}, {self.state}"
 
+    @classmethod
+    def find_all_by_group(cls, group: BloodGroupType):
+        banks = BloodBank.query.all()
+        li = []
 
+        for bank in banks:
+            bags = BloodBag.find_all_by_bank_and_group(bank.id, group)
+            li.append((bank, sum(bag.total_ml() for bag in bags)))
+
+        li = sorted(li, key=lambda x: x[1])
+        res = [b[0] for b in li]
+        return res
 
 # class BloodGroup(db.Model):
 #     __tablename__ = "blood_groups"

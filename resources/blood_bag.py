@@ -43,7 +43,7 @@ class BloodBagsByBankAPI(Resource):
         return {"bags": bag_list}, 200
 
     @classmethod
-    @jwt_required
+    # @jwt_required
     def post(cls, bank_id: int):
         if not BloodBank.find_by_id(bank_id):
             return {"message": BANK_DOES_NOT_EXIST.format(bank_id)}, 404

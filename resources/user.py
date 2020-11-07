@@ -19,7 +19,7 @@ user_list_schema = UserSchema(many=True)
 class UserListAPI(Resource):
 
     @classmethod
-    @jwt_required
+    # @jwt_required
     def get(cls):
         user_list = user_list_schema.dump(User.find_all())
         return {"users": user_list}, 200
@@ -44,7 +44,7 @@ class UserListAPI(Resource):
 class UserAPI(Resource):
 
     @classmethod
-    @jwt_required
+    # @jwt_required
     def get(cls, user_id: int):
         user = User.find_by_id(user_id)
         if not user:

@@ -20,7 +20,7 @@ class BloodBag(db.Model):
     # bag_size = db.relationship("BagSize", foreign_keys=[bag_size_id], lazy='dynamic')
 
     def total_ml(self) -> int:
-        return self.bag_size.volume * self.quantity
+        return self.size.volume * self.quantity
 
     @classmethod
     def find_all(cls):

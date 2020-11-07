@@ -1,7 +1,7 @@
 from typing import List
 from geopy.distance import geodesic
 
-def sort_by_distance(items: List, latitude: float, longitude: float, radius: float):
+def sort_by_distance(items: List, latitude: float, longitude: float, radius: float = float('inf')):
     origin = (latitude, longitude)
     filtered_items = []
 

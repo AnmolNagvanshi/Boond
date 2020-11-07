@@ -7,13 +7,14 @@ from models.blood_bank import BloodBank
 from schemas.blood_bank import BloodBankSchema
 
 from utilities import geo
-# from utilities.blood_group import BloodGroupType
+from utilities.blood_group import BloodGroupType
 
 # Response Messages
 BANK_ALREADY_EXISTS = "A blood bank with that email already exists."
 CREATED_SUCCESSFULLY = "Blood bank account created successfully."
 BANK_NOT_FOUND = "Blood bank not found."
 BANK_DELETED = "Blood bank account deleted."
+INVALID_BLOOD_GROUP = "Invalid blood group."
 
 bank_schema = BloodBankSchema()
 bank_list_schema = BloodBankSchema(many=True)
@@ -31,10 +32,21 @@ class BankListAPI(Resource):
             banks = BloodBank.find_all_by_state_city(req['state'], req['city'])
 
         # Banks by distance
-        elif 'lati' in req and 'longi' in req and 'radius' in req:
-            all_banks = BloodBank.find_all()
+        elif 'lati' in req and 'longi' in req:
+            if 'radius' in req:
+                all_banks = BloodBank.find_all()
+
+            elif 'group' in req:
+                if not BloodGroupType.has_value_member(int(req['group'])):
+                    return {"message": INVALID_BLOOD_GROUP}, 400
+                group = BloodGroupType(int(req['group']))
+                all_banks = BloodBank.find_all_by_group(group=group)
+            else:
+                return {"message": "Send radius or group in query param"}, 400
+
             # filter and sort banks by distance
-            banks = geo.sort_by_distance(all_banks, float(req['lati']), float(req['longi']), float(req['radius']))
+            radius = float(req.get('radius', float('-inf')))
+            banks = geo.sort_by_distance(all_banks, float(req['lati']), float(req['longi']), radius)
 
         # search all banks with similar names
         elif 'name' in req:
