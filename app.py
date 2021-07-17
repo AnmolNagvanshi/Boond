@@ -39,6 +39,7 @@ CORS(app)
 jwt = JWTManager(app)
 migrate = Migrate(app, db, compare_type=True)
 
+
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(err):
     return err.messages, 400

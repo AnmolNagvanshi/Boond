@@ -49,3 +49,4 @@ class LogoutAPI(Resource):
         BLACKLIST.add(jti)
         user_id = get_jwt_identity()
         return {"message": USER_LOGGED_OUT.format(user_id)}, 200
+

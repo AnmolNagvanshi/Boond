@@ -96,7 +96,6 @@ class BankAPI(Resource):
         bank.delete_from_db()
         return {"message": BANK_DELETED}, 200
 
-
 # class BanksByDistanceAPI(Resource):
 #
 #     @classmethod
@@ -125,4 +124,3 @@ class BankAPI(Resource):
 #         blood_group = BloodGroupType(group)
 #         bags = BloodBag.find_all_by_bank_and_group()
 #
-
